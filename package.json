@@ -1,0 +1,13 @@
+{
+  "name": "scubus-annual-operating-plan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive Annual Operating Plan and P&L calculator for S-CUBUS coaching institute",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
