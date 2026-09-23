@@ -35,14 +35,14 @@ body{
 
 /* Header */
 .header{
-  display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
-  border-bottom:2px solid var(--brand);padding-bottom:20px;margin-bottom:32px;flex-wrap:wrap;
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  border-bottom:2px solid var(--brand);padding:8px 0 24px;margin-bottom:32px;
 }
-.header-left{display:flex;align-items:center;gap:16px;}
-.logo{height:56px;width:auto;flex:none;}
+.hero-logo{height:150px;width:auto;margin-bottom:18px;}
 .eyebrow{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
 .h1{margin:0;font-family:var(--font-head);font-weight:600;font-size:40px;color:var(--brand);}
-.header-right{text-align:right;}
+.fy-badge{position:absolute;top:8px;right:0;text-align:right;}
 .fy-label{font-size:13px;color:var(--ink-soft);}
 .fy-value{font-family:var(--font-head);font-size:22px;font-weight:600;color:var(--brand);}
 
@@ -211,5 +211,7 @@ thead tr{border-bottom:1.5px solid var(--brand);}
   .kpis{grid-template-columns:repeat(2,1fr);}
   .payroll-summary{grid-template-columns:repeat(2,1fr);}
   .h1{font-size:30px;}
-  .logo{height:44px;}
+  .hero-logo{height:96px;margin-bottom:12px;}
+  .fy-badge{position:static;margin-bottom:12px;text-align:center;}
+  .header{padding-top:0;}
 }
