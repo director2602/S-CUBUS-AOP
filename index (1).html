@@ -1,0 +1,1406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>S-CUBUS | Annual Operating Plan FY27</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface: #fcfcfb;
+    --page: #f9f9f7;
+    --ink: #0b0b0b;
+    --ink2: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --good-text: #006300;
+    --slot1: #2a78d6; /* blue   - primary / revenue */
+    --slot2: #eb6834; /* orange - cost / secondary  */
+    --slot3: #1baf7a; /* aqua   - tertiary */
+    --good: #0ca30c;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --surface: #1a1a19;
+      --page: #0d0d0d;
+      --ink: #ffffff;
+      --ink2: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --good-text: #0ca30c;
+      --slot1: #3987e5;
+      --slot2: #d95926;
+      --slot3: #199e70;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  body { padding: 0 0 48px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+  header.top {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    margin-bottom: 24px;
+  }
+  header.top h1 { margin: 0 0 4px; font-size: 22px; font-weight: 700; }
+  header.top p { margin: 0; color: var(--ink2); font-size: 13.5px; }
+  .snapshot {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .tile {
+    background: var(--page);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .tile .label { font-size: 11.5px; color: var(--ink2); text-transform: uppercase; letter-spacing: 0.02em; }
+  .tile .val { font-size: 19px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .tile .sub { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 22px;
+  }
+  .card h2 { font-size: 16px; margin: 0 0 4px; }
+  .card .kicker { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+  .card .hint { font-size: 13px; color: var(--ink2); margin: 4px 0 16px; line-height: 1.5; }
+  .card .note { font-size: 12.5px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+
+  .table-scroll { overflow-x: auto; }
+  table.data { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 13.5px; }
+  table.data th, table.data td { padding: 7px 10px; border-bottom: 1px solid var(--grid); text-align: left; }
+  table.data th { color: var(--ink2); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.02em; }
+  table.data td.num, table.data th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.data tr.total td { font-weight: 700; border-top: 2px solid var(--baseline); border-bottom: none; }
+  table.data input {
+    width: 100%; max-width: 110px; font-size: 13.5px; padding: 4px 7px;
+    border: 1px solid var(--border); border-radius: 6px; background: var(--page); color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  table.data input:focus { outline: 2px solid var(--slot1); outline-offset: 1px; }
+  .row-flex { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12px; color: var(--ink2); font-weight: 600; }
+  .field input {
+    font-size: 14px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 7px;
+    background: var(--page); color: var(--ink); width: 120px; font-variant-numeric: tabular-nums;
+  }
+  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .badge.good { background: rgba(12,163,12,0.12); color: var(--good-text); }
+  .badge.warning { background: rgba(250,178,25,0.16); color: #8a5a00; }
+  :root:where(:not([data-theme="light"])) .badge.warning { color: var(--warning); }
+  .badge.serious { background: rgba(236,131,90,0.16); color: #9a3d1c; }
+  :root:where(:not([data-theme="light"])) .badge.serious { color: var(--serious); }
+  .badge.critical { background: rgba(208,59,59,0.12); color: var(--critical); }
+  .mini-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  nav.jump { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 14px; font-size: 12.5px; }
+  nav.jump a { color: var(--ink2); text-decoration: none; }
+  nav.jump a:hover { color: var(--slot1); text-decoration: underline; }
+  .flag {
+    background: rgba(250,178,25,0.12); border: 1px solid rgba(250,178,25,0.35);
+    border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--ink); line-height: 1.5; margin-bottom: 16px;
+  }
+  .flag b { color: var(--ink); }
+  button.reset {
+    font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 7px;
+    border: 1px solid var(--border); background: var(--page); color: var(--ink); cursor: pointer;
+  }
+  button.reset:hover { background: var(--grid); }
+  .legend { display: flex; gap: 16px; font-size: 12.5px; color: var(--ink2); margin-bottom: 8px; flex-wrap: wrap; }
+  .legend .dot { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
+  .chart-wrap { position: relative; }
+  .tooltip {
+    position: absolute; pointer-events: none; background: var(--ink); color: var(--page);
+    font-size: 12px; padding: 6px 9px; border-radius: 7px; transform: translate(-50%, -110%);
+    white-space: nowrap; opacity: 0; transition: opacity 0.08s; z-index: 5;
+  }
+  :where(:not([data-theme="light"])) .tooltip { background: var(--ink); color: var(--page); }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px 0 0; }
+  @media (max-width: 640px) {
+    .card { padding: 16px; }
+    table.data input { max-width: 80px; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>S-CUBUS | Annual Operating Plan (AOP) FY27</h1>
+    <p>Target 600 students &middot; planning currency ₹ lakh &middot; every figure below is live &mdash; edit any input and the whole plan recalculates.</p>
+    <div class="snapshot" id="snapshot"></div>
+    <nav class="jump">
+      <a href="#sec-actuals">Expectations vs Actuals</a>
+      <a href="#sec-programs">Student Mix</a>
+      <a href="#sec-pnl">P&amp;L</a>
+      <a href="#sec-breakeven">Break-even</a>
+      <a href="#sec-monthly">Monthly Plan</a>
+      <a href="#sec-scorecard">Management Scorecard</a>
+      <a href="#sec-funnel">Admissions Funnel</a>
+      <a href="#sec-capacity">Capacity &amp; Faculty</a>
+      <a href="#sec-collections">Collections &amp; Cash</a>
+      <a href="#sec-risk">Scenario &amp; Risk</a>
+      <a href="#sec-benchmark">Industry Benchmarks</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="flag">
+    <b>Recomputed from your FY27 inputs.</b> The uploaded workbook had drifted: the AOP Summary / P&amp;L / Break-even tabs showed an EBITDA of ₹241.25 lakh (36.6% margin, break-even ≈341 students), while the KPI Dashboard tab separately showed an EBITDA margin of 49.1% and a break-even of 273 &mdash; three different answers for the same number. Rebuilding everything from the itemized inputs (revenue, people cost, rent/electricity/printing, student-linked costs, marketing %) in one calculation engine instead of several hand-edited tabs gives a single consistent EBITDA of <b><span id="flag-ebitda">—</span> lakh</b> (<span id="flag-margin">—</span> margin) and a break-even of <b><span id="flag-be">—</span> students</b> &mdash; and it stays consistent as you edit any assumption below.
+  </div>
+
+  <!-- EXPECTATIONS VS ACTUALS -->
+  <div class="card" id="sec-actuals">
+    <span class="kicker">Reality check</span>
+    <h2>Expectations vs Actuals</h2>
+    <p class="hint">Expectations are the FY27 plan to the left, interpolated to today's date so the comparison is apples-to-apples (not the full-year target vs a part-year result). Actuals are pulled from the Fee Portal's live admissions database &mdash; this page shows a snapshot as of <b id="actuals-asof">—</b>; ask for the AOP to be refreshed any time you want a newer pull.</p>
+    <p class="mini-note" id="actuals-samplenote" style="margin-bottom:14px;"></p>
+
+    <div class="kpi-grid-row" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:18px;">
+      <div class="tile">
+        <div class="label">Students (to date)</div>
+        <div class="val"><span id="va-students-actual">—</span> <span class="mini-note" style="display:inline">/ <span id="va-students-expected">—</span> expected</span></div>
+        <div class="sub" id="va-students-rag"></div>
+      </div>
+      <div class="tile">
+        <div class="label">Revenue excl. GST (to date)</div>
+        <div class="val"><span id="va-revenue-actual">—</span></div>
+        <div class="sub">vs <span id="va-revenue-expected">—</span> expected</div>
+      </div>
+      <div class="tile">
+        <div class="label">GST collected</div>
+        <div class="val" id="va-gst">—</div>
+        <div class="sub">pass-through, not revenue</div>
+      </div>
+      <div class="tile">
+        <div class="label">Collected (cash, incl. GST)</div>
+        <div class="val" id="va-collected">—</div>
+        <div class="sub" id="va-collection-eff"></div>
+      </div>
+      <div class="tile">
+        <div class="label">Scholarship / discount</div>
+        <div class="val" id="va-discount-pct">—</div>
+        <div class="sub" id="va-discount-rag"></div>
+      </div>
+      <div class="tile">
+        <div class="label">Actual blended ARPU (excl. GST)</div>
+        <div class="val" id="va-arpu">—</div>
+        <div class="sub">plan target ₹1,10,000</div>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="data" id="tbl-va-programs">
+        <thead><tr><th>Program</th><th class="num">Target Students</th><th class="num">Actual Students</th><th class="num">Target Revenue (₹ lakh)</th><th class="num">Actual Revenue excl. GST (₹ lakh)</th><th class="num">GST (₹ lakh)</th><th class="num">Actual Collected (₹ lakh)</th></tr></thead>
+        <tbody></tbody>
+        <tfoot><tr class="total" id="va-programs-total"></tr></tfoot>
+      </table>
+    </div>
+
+    <div class="chart-wrap" style="margin-top:20px;">
+      <div class="legend">
+        <span><span class="dot" style="background:var(--slot1)"></span>Expected cumulative students (plan)</span>
+        <span><span class="dot" style="background:var(--slot2)"></span>Actual cumulative students (Fee Portal)</span>
+      </div>
+      <svg id="chart-va-students" width="100%" height="200" viewBox="0 0 1000 200" preserveAspectRatio="none"></svg>
+      <div class="tooltip" id="tt-va-students"></div>
+    </div>
+    <div class="chart-wrap" style="margin-top:22px;">
+      <div class="legend">
+        <span><span class="dot" style="background:var(--slot1)"></span>Expected cumulative revenue (₹ lakh)</span>
+        <span><span class="dot" style="background:var(--slot2)"></span>Actual cumulative billed revenue (₹ lakh)</span>
+      </div>
+      <svg id="chart-va-revenue" width="100%" height="200" viewBox="0 0 1000 200" preserveAspectRatio="none"></svg>
+      <div class="tooltip" id="tt-va-revenue"></div>
+    </div>
+    <p class="note">Actual lines stop at today &mdash; nothing is projected into months that haven&rsquo;t happened yet. Enrolment and revenue RAG are time-adjusted against the interpolated plan-to-date; fee collection and scholarship/discount RAG use the fixed FY27 thresholds from the Management Scorecard below, since those don&rsquo;t depend on how far through the year it is.</p>
+  </div>
+
+  <!-- STUDENT MIX & REVENUE -->
+  <div class="card" id="sec-programs">
+    <span class="kicker">Revenue Plan</span>
+    <h2>Student Mix &amp; Revenue</h2>
+    <p class="hint">Edit students or ARPU per program &mdash; revenue, mix % and blended ARPU recalculate live. School segment (8/9/10) is priced below the blended target by design; JEE/NEET + repeaters carry it.</p>
+    <div class="table-scroll">
+    <table class="data" id="tbl-programs">
+      <thead>
+        <tr><th>Program</th><th class="num">Students</th><th class="num">ARPU (₹)</th><th class="num">Revenue (₹ lakh)</th><th class="num">Student Mix %</th><th class="num">Revenue Mix %</th></tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot><tr class="total"><td>Total</td><td class="num" id="prog-tot-students"></td><td class="num" id="prog-tot-arpu">Blended</td><td class="num" id="prog-tot-revenue"></td><td class="num">100%</td><td class="num">100%</td></tr></tfoot>
+    </table>
+    </div>
+    <div class="chart-wrap" style="margin-top:18px;">
+      <div class="legend"><span><span class="dot" style="background:var(--slot1)"></span>Revenue by program (₹ lakh)</span></div>
+      <svg id="chart-programs" width="100%" height="190" viewBox="0 0 1000 190" preserveAspectRatio="none"></svg>
+      <div class="tooltip" id="tt-programs"></div>
+    </div>
+  </div>
+
+  <!-- PEOPLE COST -->
+  <div class="card">
+    <span class="kicker">Cost Plan</span>
+    <h2>People Cost</h2>
+    <p class="hint">Edit each current annual package or the across-the-board hike % &mdash; FY27 package, monthly cost and the total feed straight into the P&amp;L below.</p>
+    <div class="row-flex">
+      <div class="field"><label for="in-hike">Annual hike %</label><input id="in-hike" type="number" step="0.5" value="10" /></div>
+      <button class="reset" id="btn-reset">Reset all inputs to FY27 plan defaults</button>
+    </div>
+    <div class="table-scroll">
+    <table class="data" id="tbl-people">
+      <thead>
+        <tr><th>Role / Person</th><th class="num">Current Annual (₹ lakh)</th><th class="num">FY27 Package (₹ lakh)</th><th class="num">Monthly FY27 (₹)</th></tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot><tr class="total"><td>Total</td><td class="num" id="people-tot-current"></td><td class="num" id="people-tot-fy27"></td><td class="num" id="people-tot-monthly"></td></tr></tfoot>
+    </table>
+    </div>
+    <p class="note">Salary as % of revenue: <b id="people-pct-revenue">—</b></p>
+  </div>
+
+  <!-- FIXED OVERHEADS + STUDENT-LINKED COSTS -->
+  <div class="card">
+    <span class="kicker">Cost Plan</span>
+    <h2>Fixed Overheads &amp; Student-linked Costs</h2>
+    <p class="hint">Monthly rent/electricity/printing annualize &times;12. Student-linked costs are per admission, so they scale with the student mix above.</p>
+    <div class="row-flex">
+      <div class="field"><label for="in-rent">Rent / month (₹ lakh)</label><input id="in-rent" type="number" step="0.05" value="3.15" /></div>
+      <div class="field"><label for="in-elec">Electricity / month (₹ lakh)</label><input id="in-elec" type="number" step="0.05" value="0.70" /></div>
+      <div class="field"><label for="in-print">Printing/Machines/Other / month (₹ lakh)</label><input id="in-print" type="number" step="0.05" value="0.50" /></div>
+    </div>
+    <div class="row-flex">
+      <div class="field"><label for="in-material">Material / student (₹)</label><input id="in-material" type="number" step="100" value="4000" /></div>
+      <div class="field"><label for="in-tshirt">T-shirt / student (₹)</label><input id="in-tshirt" type="number" step="50" value="1000" /></div>
+      <div class="field"><label for="in-bag">Bag / student (₹)</label><input id="in-bag" type="number" step="50" value="500" /></div>
+      <div class="field"><label for="in-stationery">Stationery / student (₹)</label><input id="in-stationery" type="number" step="50" value="500" /></div>
+    </div>
+    <p class="note">Stationery is a planning assumption (₹500/student) &mdash; replace with the actual figure once known. Fixed overheads annualize to <b id="fixed-annual">—</b> lakh; student-linked costs total <b id="studentcost-perstudent">—</b>/student &mdash; <b id="studentcost-annual">—</b> lakh at the current student mix.</p>
+  </div>
+
+  <!-- MARKETING PLAN -->
+  <div class="card">
+    <span class="kicker">Cost Plan</span>
+    <h2>Marketing Budget &amp; Acquisition Plan</h2>
+    <p class="hint">Marketing is set as a % of revenue (so it scales with the student mix above) and split across channels below &mdash; edit either and the budget redistributes live.</p>
+    <div class="row-flex">
+      <div class="field"><label for="in-mktgpct">Marketing % of revenue</label><input id="in-mktgpct" type="number" step="0.5" value="10" /></div>
+      <div class="field"><label>Marketing budget (₹ lakh)</label><input disabled id="out-mktgbudget" /></div>
+      <div class="field"><label>Implied cost / admission (₹)</label><input disabled id="out-cac" /></div>
+    </div>
+    <div class="table-scroll">
+    <table class="data" id="tbl-channels">
+      <thead><tr><th>Channel</th><th class="num">Split %</th><th class="num">Budget (₹ lakh)</th><th>Primary KPI</th></tr></thead>
+      <tbody></tbody>
+      <tfoot><tr class="total"><td>Total</td><td class="num" id="channels-tot-pct"></td><td class="num" id="channels-tot-budget"></td><td></td></tr></tfoot>
+    </table>
+    </div>
+    <p class="note">Acquisition guardrail: blended CAC ≤ ₹12,000; pause or shift budget off any channel running above ₹15,000 CAC.</p>
+  </div>
+
+  <!-- P&L + BREAK-EVEN -->
+  <div class="card" id="sec-pnl">
+    <span class="kicker">Run-rate at target mix</span>
+    <h2>Annual Operating P&amp;L (₹ lakh)</h2>
+    <p class="hint">The full-year run rate if every program above is running at its target mix for all 12 months. The Monthly Operating Plan further down shows the actual FY27 ramp, which recognizes less revenue than this while the institute is still filling batches. Revenue here is net of scholarship but excludes GST &mdash; GST collected on fees is a pass-through liability to the government, not institute revenue, and the plan's per-program ARPU figures are themselves pre-GST course fees.</p>
+    <p class="kicker" style="display:block; margin-bottom:6px;">Debt &amp; finance cost</p>
+    <div class="row-flex">
+      <div class="field"><label for="in-loanprincipal">Term loan &mdash; PNB (₹ lakh)</label><input id="in-loanprincipal" type="number" step="1" value="35" /></div>
+      <div class="field"><label for="in-loanrate">Term loan rate %</label><input id="in-loanrate" type="number" step="0.25" value="10" /></div>
+      <div class="field"><label for="in-cclimit">CC limit (₹ lakh)</label><input id="in-cclimit" type="number" step="1" value="125" disabled /></div>
+      <div class="field"><label for="in-ccused">CC utilised (₹ lakh)</label><input id="in-ccused" type="number" step="1" value="0" /></div>
+      <div class="field"><label for="in-ccrate">CC rate %</label><input id="in-ccrate" type="number" step="0.25" value="10" /></div>
+      <div class="field"><label for="in-taxpct">Corporate tax rate % (illustrative)</label><input id="in-taxpct" type="number" step="1" value="25" /></div>
+    </div>
+    <p class="note" style="margin-top:-6px; margin-bottom:14px;">Term loan interest is estimated on the full outstanding principal (no amortization schedule modeled, since tenure/EMI weren't given &mdash; update the principal as it's paid down). The ₹1.25 Cr CC limit is a sanctioned ceiling; interest is charged only on what's actually drawn, so set CC utilised to match the real average balance.</p>
+    <div class="table-scroll">
+    <table class="data" id="tbl-pnl">
+      <thead><tr><th>Line Item</th><th class="num">Annual ₹ lakh</th><th class="num">% Revenue</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    </div>
+    <p class="note">Tax is illustrative only &mdash; a flat rate applied to Profit Before Tax, not a real computation of taxable income (depreciation, carried-forward losses, exemptions etc. aren't modeled). Edit the rate to match your actual effective rate once known.</p>
+  </div>
+
+  <div class="card" id="sec-breakeven">
+    <span class="kicker">Sensitivity</span>
+    <h2>Break-even Analysis</h2>
+    <p class="hint">Contribution per student = blended ARPU, net of the marketing % and student-linked cost per student. Break-even is the student count where cumulative contribution covers people cost + rent/electricity/printing.</p>
+    <div class="table-scroll">
+    <table class="data" id="tbl-breakeven">
+      <thead><tr><th>Metric</th><th class="num">Value</th><th>Explanation</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    </div>
+    <div class="chart-wrap" style="margin-top:18px;">
+      <div class="legend"><span><span class="dot" style="background:var(--slot1)"></span>Operating profit (₹ lakh)</span><span style="color:var(--muted)">Dashed line = break-even</span></div>
+      <svg id="chart-breakeven" width="100%" height="200" viewBox="0 0 1000 200" preserveAspectRatio="none"></svg>
+      <div class="tooltip" id="tt-breakeven"></div>
+    </div>
+  </div>
+
+  <!-- MONTHLY OPERATING PLAN -->
+  <div class="card" id="sec-monthly">
+    <span class="kicker">FY27 Ramp</span>
+    <h2>Monthly Operating Plan</h2>
+    <p class="hint">Edit the opening student count or any month's new-enrolment ramp. Revenue each month is recognized on the average of the opening and closing cumulative student count for that month &times; blended ARPU &divide; 12 &mdash; a planning recognition model, not a cash-collection schedule.</p>
+    <div class="row-flex">
+      <div class="field"><label for="in-opening">Opening students (1 Apr)</label><input id="in-opening" type="number" step="1" value="30" /></div>
+    </div>
+    <div class="table-scroll">
+    <table class="data" id="tbl-monthly">
+      <thead><tr><th>Month</th><th class="num">New Enrolments</th><th class="num">Cumulative</th><th class="num">Revenue (₹ lakh)</th><th class="num">People Cost</th><th class="num">Fixed OH</th><th class="num">Marketing</th><th class="num">Student Costs</th><th class="num">Operating Surplus</th></tr></thead>
+      <tbody></tbody>
+      <tfoot><tr class="total" id="monthly-total-row"></tr></tfoot>
+    </table>
+    </div>
+    <div class="chart-wrap" style="margin-top:18px;">
+      <div class="legend">
+        <span><span class="dot" style="background:var(--slot1)"></span>Revenue</span>
+        <span><span class="dot" style="background:var(--slot2)"></span>Total monthly cost</span>
+      </div>
+      <svg id="chart-monthly" width="100%" height="200" viewBox="0 0 1000 200" preserveAspectRatio="none"></svg>
+      <div class="tooltip" id="tt-monthly"></div>
+    </div>
+    <p class="note" id="monthly-note"></p>
+  </div>
+
+  <!-- NOTES -->
+  <div class="card">
+    <span class="kicker">Methodology</span>
+    <h2>Assumptions &amp; Notes</h2>
+    <ol style="font-size:13.5px; color:var(--ink2); line-height:1.7; padding-left:20px; margin:0;">
+      <li>Student mix totals the target above and can be changed without changing the model logic.</li>
+      <li>School segment (Class 8&ndash;10) and the JEE/NEET + repeater segment each have their own ARPU; blended ARPU is the revenue-weighted average of whatever mix is entered.</li>
+      <li>All listed salaries/packages receive the hike % above for FY27.</li>
+      <li>Marketing budget is set as a % of revenue; target blended CAC is ≤ ₹12,000.</li>
+      <li>Rent, electricity and printing/machines/other are entered monthly and annualized (&times;12).</li>
+      <li>EBITDA is before depreciation, interest, income tax, GST effects, scholarships/fee waivers, payment gateway charges and any faculty incentive/variable pay not entered here.</li>
+      <li>Monthly revenue is a planning recognition model (average of opening and closing cumulative students &times; blended ARPU &divide; 12), not a cash-collection schedule. For cash control, track billed, collected and outstanding separately &mdash; see the Fee Portal.</li>
+      <li>Recommended management rule: do not add headcount unless enrolments / capacity / batch size justify it.</li>
+      <li>Recommended operating cadence: weekly admissions dashboard; monthly P&amp;L + cash review; quarterly pricing and CAC review.</li>
+      <li>Student-linked costs: material + T-shirt + bag + stationery, all editable above; stationery is a planning assumption because no exact figure was given.</li>
+      <li>Every total on this page (P&amp;L, break-even, KPIs, monthly plan) is derived from the same inputs in one calculation, so they cannot drift out of sync with each other the way the uploaded workbook had.</li>
+      <li>Debt: PNB term loan of ₹35 lakh and a ₹1.25 crore cash credit limit, both at 10% p.a., are modeled as annual interest below EBITDA (Profit Before Tax = EBITDA &minus; term loan interest &minus; CC interest on the utilised balance). No amortization schedule is modeled since tenure/EMI weren't given &mdash; update the term loan principal above as it's paid down, and keep CC utilised current. Break-even and the monthly operating plan stay EBITDA-level (operating, before financing cost), which is the standard way to read break-even independent of how the business is funded.</li>
+      <li>Revenue actuals (Expectations vs Actuals, Management Scorecard) are shown excluding GST, matching the plan's own pre-GST per-program ARPU figures; GST collected is tracked separately as a pass-through liability, never counted as revenue. Collection efficiency is the one cash-basis exception &mdash; both collected and billed there include GST, since that's a real cash-flow check, not a revenue comparison.</li>
+    </ol>
+  </div>
+
+  <!-- MANAGEMENT AOP SCORECARD -->
+  <div class="card" id="sec-scorecard">
+    <span class="kicker">Expectations &middot; Coaching-industry layer</span>
+    <h2>Management AOP Scorecard</h2>
+    <p class="hint">FY27 targets with Green/Amber/Red thresholds, as management should review them weekly or monthly. Where the Fee Portal has real admissions data, the Actual and Status columns are live; everything else is the target definition from your plan.</p>
+    <div class="table-scroll">
+      <table class="data" id="tbl-scorecard">
+        <thead><tr><th>Pillar</th><th>FY27 Target</th><th>Primary KPI</th><th class="num">Actual</th><th>Status</th><th>Owner</th><th>Review</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ADMISSIONS FUNNEL -->
+  <div class="card" id="sec-funnel">
+    <span class="kicker">Expectations &middot; Acquisition</span>
+    <h2>Admissions Funnel &amp; CAC Plan</h2>
+    <p class="hint">The volume plan behind the 600-student target, assuming 10 leads per paid admission. The Fee Portal doesn&rsquo;t currently track leads/counselling/demo stages, so only the final "Paid admissions" row has an Actual &mdash; wiring a leads/CRM source in later would light up the rest of this funnel.</p>
+    <div class="table-scroll">
+      <table class="data" id="tbl-funnel">
+        <thead><tr><th>Funnel Stage</th><th class="num">Target Volume</th><th>Conversion</th><th class="num">Actual</th><th>KPI</th><th>Owner</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="note">CAC control: ₹66L annual marketing &divide; 600 admissions = ₹11,000 average marketing spend per admission. Judge channels on paid admissions, collected revenue and contribution after student-linked costs &mdash; not raw lead volume. Shift budget monthly toward channels at or below ₹12k CAC with strong fee collection; cut anything consistently above ₹15k unless it materially helps brand or referrals.</p>
+  </div>
+
+  <!-- CAPACITY & FACULTY -->
+  <div class="card" id="sec-capacity">
+    <span class="kicker">Expectations &middot; Operations</span>
+    <h2>Batch Capacity, Faculty Utilisation &amp; Staffing Plan</h2>
+    <p class="hint">Planning assumptions and hire/consolidate triggers. The Fee Portal tracks admissions and fees, not batch rosters or faculty timetables, so there are no actuals to show here yet &mdash; these stay target-only until that data exists somewhere.</p>
+    <div class="table-scroll">
+      <table class="data" id="tbl-capacity">
+        <thead><tr><th>Metric</th><th>Planning Assumption</th><th>FY27 Target</th><th>Trigger to Hire</th><th>Trigger to Consolidate</th><th>Owner</th><th>Frequency</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- COLLECTIONS & CASH -->
+  <div class="card" id="sec-collections">
+    <span class="kicker">Expectations &middot; Cash discipline</span>
+    <h2>Collections, Working Capital &amp; Cash Discipline</h2>
+    <p class="hint">Where the Fee Portal has billed and collected amounts, Actual and Status are computed live from the same admissions used in Expectations vs Actuals above.</p>
+    <div class="table-scroll">
+      <table class="data" id="tbl-collections">
+        <thead><tr><th>KPI</th><th>Target</th><th>Formula / Definition</th><th class="num">Actual</th><th>Status</th><th>Owner</th><th>Review</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RISK & SCENARIO -->
+  <div class="card" id="sec-risk">
+    <span class="kicker">Expectations &middot; Scenario planning</span>
+    <h2>Scenario Planning &amp; Risk Register</h2>
+    <p class="hint">Downside / Base / Upside operating profit at different admission and ARPU levels, using this page's own calculation engine (not re-typed figures) &mdash; and the risk register to watch alongside it.</p>
+    <div class="table-scroll">
+      <table class="data" id="tbl-scenario">
+        <thead><tr><th>Scenario</th><th class="num">Admissions</th><th class="num">Blended ARPU</th><th class="num">Revenue ₹Cr</th><th class="num">Marketing ₹L</th><th class="num">Student Cost ₹L</th><th class="num">Operating Profit ₹L</th><th>Management Action</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="table-scroll" style="margin-top:16px;">
+      <table class="data" id="tbl-risk">
+        <thead><tr><th>Risk</th><th>Probability</th><th>Impact</th><th>Early Warning</th><th>Mitigation</th><th>Owner</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INDUSTRY BENCHMARKS -->
+  <div class="card" id="sec-benchmark">
+    <span class="kicker">Expectations &middot; Reference</span>
+    <h2>What Large Coaching Operators Track</h2>
+    <p class="hint">Management-design lessons from how larger operators run their numbers &mdash; not a claim that S-CUBUS should copy another company's exact margins or cost ratios.</p>
+    <div class="table-scroll">
+      <table class="data" id="tbl-benchmark">
+        <thead><tr><th>Area</th><th>What to track</th><th>S-CUBUS action</th><th>Industry evidence / rationale</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>S-CUBUS Annual Operating Plan &middot; FY27 &middot; all figures in ₹ unless marked ₹ lakh</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Design tokens pulled from the dataviz skill's reference palette ----------
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  // ---------- Defaults (from S_CUBUS_AOP_FY27_600_Students.xlsx) ----------
+  var DEFAULTS = {
+    programs: [
+      ["Class 8", 60, 70000],
+      ["Class 9", 70, 70000],
+      ["Class 10", 70, 70000],
+      ["11th NEET", 70, 130000],
+      ["12th NEET", 70, 130000],
+      ["11th JEE", 65, 130000],
+      ["12th JEE", 65, 130000],
+      ["JEE Repeater", 60, 130000],
+      ["NEET Repeater", 70, 130000]
+    ],
+    hikePct: 10,
+    people: [
+      ["Sarika - Director", 30],
+      ["Subir - Director", 30],
+      ["Amit - Chemistry", 24],
+      ["Sachin - Physics", 14],
+      ["Satuti - Chemistry", 12],
+      ["Yashwant - Maths", 15],
+      ["Vaishali - Botany", 14.5],
+      ["Bridul", 6],
+      ["EDP", 3.6],
+      ["Editor 1", 5.4],
+      ["Editor 2", 2.16],
+      ["Counselor 1", 3.6],
+      ["Counselor 2", 2.04],
+      ["Suleman - Marketing", 8.4],
+      ["Gaurav Anand - Marketing", 10.2],
+      ["Shubham - Admin", 3.6],
+      ["Office Boy 1", 2.64],
+      ["Office Boy 2", 2.4],
+      ["Guard", 4.8],
+      ["Legal + HR", 3.6]
+    ],
+    rentM: 3.15, elecM: 0.70, printM: 0.50,
+    material: 4000, tshirt: 1000, bag: 500, stationery: 500,
+    mktgPct: 10,
+    loanPrincipalL: 35, loanRatePct: 10,
+    ccLimitL: 125, ccUsedL: 0, ccRatePct: 10,
+    taxPct: 25,
+    channels: [
+      ["Digital Performance", 0.40, "Qualified Leads + Enrolments"],
+      ["School/Local Outreach", 0.20, "School visits / seminars"],
+      ["Content + Social", 0.10, "Qualified leads + content reach"],
+      ["Scholarships/Events", 0.10, "Conversions from events"],
+      ["Referral/Alumni", 0.05, "Parent/student referrals"],
+      ["Branding/Outdoor", 0.10, "Local awareness"],
+      ["Contingency", 0.05, "Reserve"]
+    ],
+    opening: 30,
+    months: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
+    monthlyNew: [80, 70, 60, 55, 50, 45, 45, 40, 40, 35, 30, 20]
+  };
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  var state = clone(DEFAULTS);
+
+  // ---------- Actuals (live pull from the Fee Portal's Supabase admissions_computed table) ----------
+  // netExclGst is the revenue figure comparable to the plan's per-program ARPU (which is itself pre-GST);
+  // gstAmount is a pass-through liability collected on behalf of the government, never counted as revenue;
+  // actualPayable/collected are GST-inclusive cash-basis figures used only for the collection-efficiency check.
+  var ACTUALS = {
+    asOfLabel: "8 Oct 2026",
+    records: [
+      { date: "2026-09-30", batchKey: "found9", batchLabel: "Foundation Class 9", batchGroup: "Foundation", gross: 87000, scholarship: 27500, netExclGst: 59500, gstAmount: 10710, actualPayable: 68210, collected: 40000 }
+    ]
+  };
+
+  var FUNNEL = [
+    { stage: "Enquiries", target: 6000, conv: "Top of funnel", kpi: "Lead volume", owner: "Marketing" },
+    { stage: "Counselled", target: 3600, conv: "60% of enquiries", kpi: "Counsellor conversion", owner: "Counselling" },
+    { stage: "Demo attended", target: 1800, conv: "50% of counselled", kpi: "Demo show-rate", owner: "Academics" },
+    { stage: "Applications", target: 1200, conv: "67% of demo", kpi: "Application rate", owner: "Admissions" },
+    { stage: "Paid admissions", target: 600, conv: "50% of applications", kpi: "Admission conversion", owner: "Admissions" }
+  ];
+
+  var CAPACITY = [
+    ["Batch size", "30–40 students/batch, target 35", "Avg 35 students/batch", "Avg &gt; 38 for 2 consecutive months", "Avg &lt; 20 for 2 consecutive months", "Academic Head", "Monthly"],
+    ["Batch occupancy", "Filled seats ÷ batch capacity", "≥ 75% occupancy", "&gt; 90% occupancy sustained", "&lt; 50% occupancy sustained", "Academic Head", "Monthly"],
+    ["Faculty utilisation", "Teaching hours used ÷ available hours", "≥ 75% utilisation", "&gt; 85% utilisation sustained", "&lt; 60% utilisation sustained", "Director", "Monthly"]
+  ];
+
+  var RISK_REGISTER = [
+    ["Enrolment shortfall", "Medium", "High — misses revenue &amp; break-even targets", "Monthly admissions trailing the ramp plan for 2+ months", "Weekly funnel review; reallocate marketing spend to best-converting channels", "Director"],
+    ["Faculty attrition (core subject)", "Medium", "High — batch disruption, parent complaints", "Resignation notice; sustained faculty dissatisfaction", "Retention conversations, backup/bench faculty for core subjects, timely hike reviews", "Director"],
+    ["Fee collection delays/defaults", "Medium", "Medium — cash flow strain", "Collection efficiency drops below 90% for a month", "Structured installment plans, proactive follow-up before due dates, cap outstanding dues before re-enrolment", "Finance"],
+    ["Marketing CAC overrun", "Medium", "Medium — erodes margin even if admissions hit target", "Blended CAC trending above ₹15,000", "Shift budget to channels at/below ₹12k CAC; pause underperforming channels", "Marketing"],
+    ["Competitive pricing pressure", "Low", "Medium — forces scholarship/discount creep", "Scholarship/discount ratio trending above 15%", "Hold the 40% scholarship floor policy; compete on outcomes, not price", "Director"],
+    ["NEET/JEE exam pattern or policy change", "Low", "Medium — curriculum/material rework needed", "Official notification from NTA/exam boards", "Academic team tracks notifications; build buffer into the content revision calendar", "Academic Head"],
+    ["Facility/lease risk", "Low", "High — disrupts batches if space is lost", "Lease renewal approaching without confirmation", "Renew/renegotiate lease well ahead of expiry; keep a shortlist of backup premises", "Director"],
+    ["Cash reserve shortfall", "Low", "High — can't cover a bad month without external funding", "Cash reserve falls below 3 months of opex", "Monthly cash reserve review; hold reserve as a standing board metric", "Director"]
+  ];
+
+  var BENCHMARKS = [
+    ["Operating margin discipline", "EBITDA margin, tracked monthly, not just at year-end", "Hold a margin guardrail and review it as often as revenue, not just once a year", "Large listed/VC-backed coaching operators publish margin as a standing disclosure metric, not a once-a-year number"],
+    ["Marketing efficiency / CAC", "Cost per paid admission, by channel", "Keep a ≤₹12,000 blended CAC guardrail; review by channel monthly", "Larger operators manage CAC at the channel level rather than a single blended guess"],
+    ["Faculty cost ratio", "Faculty/people cost as % of revenue, tracked separately from general admin cost", "Watch the ratio computed live in the Management Scorecard above", "Public disclosures separate faculty cost from general staff cost as its own lever"],
+    ["Batch utilisation / capacity", "Occupancy % per batch, not just total enrolment", "Don't open or keep running a batch below the occupancy floor", "Industry commentary treats capacity utilisation as a margin lever in its own right, not just a by-product of enrolment"],
+    ["Renewal / retention", "Repeat and renewal enrolments, named and tracked as their own KPI", "Report renewal rate quarterly once the data exists", "Large coaching chains name retention/renewal in public disclosures alongside new-student acquisition"]
+  ];
+
+  function mapProgramName(batchKey, batchLabel, batchGroup) {
+    var lbl = (batchLabel || "").toLowerCase();
+    if (batchGroup === "Foundation") {
+      if (lbl.indexOf("8") !== -1) return "Class 8";
+      if (lbl.indexOf("9") !== -1) return "Class 9";
+      if (lbl.indexOf("10") !== -1) return "Class 10";
+      return null;
+    }
+    if (batchGroup === "NEET") {
+      if (lbl.indexOf("repeat") !== -1) return "NEET Repeater";
+      if (lbl.indexOf("11") !== -1) return "11th NEET";
+      if (lbl.indexOf("12") !== -1) return "12th NEET";
+      return null;
+    }
+    if (batchGroup === "JEE") {
+      if (lbl.indexOf("repeat") !== -1) return "JEE Repeater";
+      if (lbl.indexOf("11") !== -1) return "11th JEE";
+      if (lbl.indexOf("12") !== -1) return "12th JEE";
+      return null;
+    }
+    return null; // Online, Special, SIP, SATHII, Dubai etc. are not ARPU-target classes
+  }
+
+  function computeActuals() {
+    var byProgram = {};
+    var totals = { students: 0, gross: 0, scholarship: 0, netExclGst: 0, gstAmount: 0, actualPayable: 0, collected: 0 };
+    ACTUALS.records.forEach(function (r) {
+      totals.students += 1;
+      totals.gross += r.gross; totals.scholarship += r.scholarship; totals.netExclGst += r.netExclGst;
+      totals.gstAmount += r.gstAmount; totals.actualPayable += r.actualPayable; totals.collected += r.collected;
+      var pname = mapProgramName(r.batchKey, r.batchLabel, r.batchGroup);
+      if (pname) {
+        if (!byProgram[pname]) byProgram[pname] = { students: 0, gross: 0, scholarship: 0, netExclGst: 0, gstAmount: 0, actualPayable: 0, collected: 0 };
+        var bp = byProgram[pname];
+        bp.students += 1; bp.gross += r.gross; bp.scholarship += r.scholarship; bp.netExclGst += r.netExclGst;
+        bp.gstAmount += r.gstAmount; bp.actualPayable += r.actualPayable; bp.collected += r.collected;
+      }
+    });
+    // collection efficiency is a cash-basis check (both sides GST-inclusive); revenue-vs-plan and ARPU use
+    // the pre-GST net figure so they compare like-for-like against the plan's pre-GST per-program ARPU
+    totals.collectionEff = totals.actualPayable > 0 ? totals.collected / totals.actualPayable : null;
+    totals.discountPct = totals.gross > 0 ? totals.scholarship / totals.gross : null;
+    totals.arpu = totals.students > 0 ? totals.netExclGst / totals.students : null;
+    return { byProgram: byProgram, totals: totals };
+  }
+
+  // 0 = 1 Apr FY27 start, 12 = 31 Mar FY27 end; real "today" so the live site stays accurate every day it's viewed
+  function fyMonthProgress() {
+    var fyStart = new Date(2026, 3, 1);
+    var fyEnd = new Date(2027, 3, 1);
+    var today = new Date();
+    if (today < fyStart) return 0;
+    if (today >= fyEnd) return 12;
+    var monthsElapsed = (today.getFullYear() - fyStart.getFullYear()) * 12 + (today.getMonth() - fyStart.getMonth());
+    var daysInCurMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    var fracInMonth = (today.getDate() - 1) / daysInCurMonth;
+    return monthsElapsed + fracInMonth;
+  }
+
+  function computeExpectedToDate(mm, p) {
+    if (p >= 12) return { students: mm.rows[11].cum, revenueLakh: mm.totals.revenue };
+    var floorIdx = Math.max(0, Math.min(11, Math.floor(p)));
+    var frac = Math.max(0, Math.min(1, p - floorIdx));
+    var monthStartCum = floorIdx === 0 ? state.opening : mm.rows[floorIdx - 1].cum;
+    var monthEndCum = mm.rows[floorIdx].cum;
+    var cumStudents = monthStartCum + frac * (monthEndCum - monthStartCum);
+    var cumRevenue = 0;
+    for (var i = 0; i < floorIdx; i++) cumRevenue += mm.rows[i].revenue;
+    cumRevenue += frac * mm.rows[floorIdx].revenue;
+    return { students: cumStudents, revenueLakh: cumRevenue };
+  }
+
+  // Monthly cumulative actuals, null after "today" so the chart never projects into months that haven't happened
+  function computeActualMonthlySeries() {
+    var cumStudents = new Array(12).fill(0);
+    var cumRevenue = new Array(12).fill(0);
+    ACTUALS.records.forEach(function (r) {
+      var d = new Date(r.date);
+      var idx = (d.getFullYear() - 2026) * 12 + (d.getMonth() - 3);
+      idx = Math.max(0, Math.min(11, idx));
+      for (var i = idx; i < 12; i++) { cumStudents[i] += 1; cumRevenue[i] += r.netExclGst / 100000; }
+    });
+    var todayIdx = Math.max(0, Math.min(11, Math.floor(fyMonthProgress())));
+    var students = [], revenue = [];
+    for (var i = 0; i < 12; i++) {
+      if (i <= todayIdx) { students.push(cumStudents[i]); revenue.push(cumRevenue[i]); }
+      else { students.push(null); revenue.push(null); }
+    }
+    return { students: students, revenue: revenue };
+  }
+
+  function ragHigherBetter(value, goodMin, warnMin) {
+    if (value == null || isNaN(value)) return { cls: "warning", label: "No data yet" };
+    if (value >= goodMin) return { cls: "good", label: "On track" };
+    if (value >= warnMin) return { cls: "warning", label: "Watch" };
+    return { cls: "critical", label: "Behind" };
+  }
+  function ragLowerBetter(value, goodMax, warnMax) {
+    if (value == null || isNaN(value)) return { cls: "warning", label: "No data yet" };
+    if (value <= goodMax) return { cls: "good", label: "On track" };
+    if (value <= warnMax) return { cls: "warning", label: "Watch" };
+    return { cls: "critical", label: "Above target" };
+  }
+  function badgeHtml(st) { return '<span class="badge ' + st.cls + '">' + st.label + "</span>"; }
+
+  // ---------- formatting ----------
+  function fmtINR(n) {
+    if (n == null || isNaN(n)) return "₹0";
+    return "₹" + Math.round(n).toLocaleString("en-IN");
+  }
+  function fmtLakh(n, dp) {
+    if (n == null || isNaN(n)) return "—";
+    return n.toLocaleString("en-IN", { minimumFractionDigits: dp == null ? 2 : dp, maximumFractionDigits: dp == null ? 2 : dp });
+  }
+  function fmtPct(n, dp) {
+    if (n == null || isNaN(n)) return "—";
+    return (n * 100).toFixed(dp == null ? 1 : dp) + "%";
+  }
+
+  // ---------- build editable tables once ----------
+  var programsBody = document.querySelector("#tbl-programs tbody");
+  state.programs.forEach(function (p, i) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + p[0] + "</td>" +
+      '<td class="num"><input data-kind="prog-students" data-i="' + i + '" type="number" step="1" value="' + p[1] + '"></td>' +
+      '<td class="num"><input data-kind="prog-arpu" data-i="' + i + '" type="number" step="1000" value="' + p[2] + '"></td>' +
+      '<td class="num" data-cell="prog-revenue"></td>' +
+      '<td class="num" data-cell="prog-studentmix"></td>' +
+      '<td class="num" data-cell="prog-revenuemix"></td>';
+    programsBody.appendChild(tr);
+  });
+
+  var peopleBody = document.querySelector("#tbl-people tbody");
+  state.people.forEach(function (p, i) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + p[0] + "</td>" +
+      '<td class="num"><input data-kind="people-current" data-i="' + i + '" type="number" step="0.5" value="' + p[1] + '"></td>' +
+      '<td class="num" data-cell="people-fy27"></td>' +
+      '<td class="num" data-cell="people-monthly"></td>';
+    peopleBody.appendChild(tr);
+  });
+
+  var channelsBody = document.querySelector("#tbl-channels tbody");
+  state.channels.forEach(function (c, i) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + c[0] + "</td>" +
+      '<td class="num"><input data-kind="chan-pct" data-i="' + i + '" type="number" step="1" value="' + Math.round(c[1] * 100) + '"></td>' +
+      '<td class="num" data-cell="chan-budget"></td>' +
+      "<td>" + c[2] + "</td>";
+    channelsBody.appendChild(tr);
+  });
+
+  var monthlyBody = document.querySelector("#tbl-monthly tbody");
+  state.months.forEach(function (m, i) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + m + "</td>" +
+      '<td class="num"><input data-kind="month-new" data-i="' + i + '" type="number" step="1" value="' + state.monthlyNew[i] + '"></td>' +
+      '<td class="num" data-cell="month-cum"></td>' +
+      '<td class="num" data-cell="month-revenue"></td>' +
+      '<td class="num" data-cell="month-people"></td>' +
+      '<td class="num" data-cell="month-fixed"></td>' +
+      '<td class="num" data-cell="month-mktg"></td>' +
+      '<td class="num" data-cell="month-studentcost"></td>' +
+      '<td class="num" data-cell="month-surplus"></td>';
+    monthlyBody.appendChild(tr);
+  });
+
+  // ---------- read current input values into state ----------
+  function readState() {
+    document.querySelectorAll('[data-kind="prog-students"]').forEach(function (el) { state.programs[+el.dataset.i][1] = parseFloat(el.value) || 0; });
+    document.querySelectorAll('[data-kind="prog-arpu"]').forEach(function (el) { state.programs[+el.dataset.i][2] = parseFloat(el.value) || 0; });
+    document.querySelectorAll('[data-kind="people-current"]').forEach(function (el) { state.people[+el.dataset.i][1] = parseFloat(el.value) || 0; });
+    document.querySelectorAll('[data-kind="chan-pct"]').forEach(function (el) { state.channels[+el.dataset.i][1] = (parseFloat(el.value) || 0) / 100; });
+    document.querySelectorAll('[data-kind="month-new"]').forEach(function (el) { state.monthlyNew[+el.dataset.i] = parseFloat(el.value) || 0; });
+    state.hikePct = parseFloat(document.getElementById("in-hike").value) || 0;
+    state.rentM = parseFloat(document.getElementById("in-rent").value) || 0;
+    state.elecM = parseFloat(document.getElementById("in-elec").value) || 0;
+    state.printM = parseFloat(document.getElementById("in-print").value) || 0;
+    state.material = parseFloat(document.getElementById("in-material").value) || 0;
+    state.tshirt = parseFloat(document.getElementById("in-tshirt").value) || 0;
+    state.bag = parseFloat(document.getElementById("in-bag").value) || 0;
+    state.stationery = parseFloat(document.getElementById("in-stationery").value) || 0;
+    state.mktgPct = parseFloat(document.getElementById("in-mktgpct").value) || 0;
+    state.loanPrincipalL = parseFloat(document.getElementById("in-loanprincipal").value) || 0;
+    state.loanRatePct = parseFloat(document.getElementById("in-loanrate").value) || 0;
+    state.ccLimitL = parseFloat(document.getElementById("in-cclimit").value) || 0;
+    state.ccUsedL = parseFloat(document.getElementById("in-ccused").value) || 0;
+    state.ccRatePct = parseFloat(document.getElementById("in-ccrate").value) || 0;
+    state.taxPct = parseFloat(document.getElementById("in-taxpct").value) || 0;
+    state.opening = parseFloat(document.getElementById("in-opening").value) || 0;
+  }
+
+  // ---------- the single calculation engine ----------
+  function compute() {
+    var totalStudents = state.programs.reduce(function (s, p) { return s + p[1]; }, 0);
+    var revenueLakh = state.programs.reduce(function (s, p) { return s + (p[1] * p[2]) / 100000; }, 0);
+    var blendedArpu = totalStudents > 0 ? (revenueLakh * 100000) / totalStudents : 0;
+
+    var peopleCurrentTotal = state.people.reduce(function (s, p) { return s + p[1]; }, 0);
+    var peopleFy27Total = peopleCurrentTotal * (1 + state.hikePct / 100);
+
+    var fixedAnnual = (state.rentM + state.elecM + state.printM) * 12;
+
+    var perStudentLinked = state.material + state.tshirt + state.bag + state.stationery;
+    var studentLinkedAnnualLakh = (perStudentLinked * totalStudents) / 100000;
+
+    var mktgBudgetLakh = (state.mktgPct / 100) * revenueLakh;
+    var cac = totalStudents > 0 ? (mktgBudgetLakh * 100000) / totalStudents : 0;
+
+    var totalOperatingCost = peopleFy27Total + fixedAnnual + studentLinkedAnnualLakh + mktgBudgetLakh;
+    var ebitda = revenueLakh - totalOperatingCost;
+    var ebitdaMargin = revenueLakh > 0 ? ebitda / revenueLakh : 0;
+
+    var contributionPerStudent = blendedArpu * (1 - state.mktgPct / 100) - perStudentLinked;
+    var fixedForBreakevenRupees = (peopleFy27Total + fixedAnnual) * 100000;
+    var breakevenStudents = contributionPerStudent > 0 ? Math.ceil(fixedForBreakevenRupees / contributionPerStudent) : null;
+
+    var termLoanInterest = state.loanPrincipalL * (state.loanRatePct / 100);
+    var ccInterest = state.ccUsedL * (state.ccRatePct / 100);
+    var financeCost = termLoanInterest + ccInterest;
+    var pbt = ebitda - financeCost;
+    var taxAmount = pbt > 0 ? pbt * (state.taxPct / 100) : 0;
+    var profitAfterTax = pbt - taxAmount;
+
+    return {
+      totalStudents: totalStudents,
+      revenueLakh: revenueLakh,
+      blendedArpu: blendedArpu,
+      peopleCurrentTotal: peopleCurrentTotal,
+      peopleFy27Total: peopleFy27Total,
+      fixedAnnual: fixedAnnual,
+      perStudentLinked: perStudentLinked,
+      studentLinkedAnnualLakh: studentLinkedAnnualLakh,
+      mktgBudgetLakh: mktgBudgetLakh,
+      cac: cac,
+      totalOperatingCost: totalOperatingCost,
+      ebitda: ebitda,
+      ebitdaMargin: ebitdaMargin,
+      contributionPerStudent: contributionPerStudent,
+      fixedForBreakevenRupees: fixedForBreakevenRupees,
+      breakevenStudents: breakevenStudents,
+      termLoanInterest: termLoanInterest,
+      ccInterest: ccInterest,
+      financeCost: financeCost,
+      pbt: pbt,
+      taxAmount: taxAmount,
+      profitAfterTax: profitAfterTax
+    };
+  }
+
+  function computeMonthly(m) {
+    var rows = [];
+    var cum = state.opening;
+    var peopleMonthly = m.peopleFy27Total / 12;
+    var fixedMonthly = m.fixedAnnual / 12;
+    var mktgMonthly = m.mktgBudgetLakh / 12;
+    var studentCostMonthly = m.studentLinkedAnnualLakh / 12;
+    var totals = { newE: 0, revenue: 0, people: 0, fixed: 0, mktg: 0, studentcost: 0, surplus: 0 };
+    state.months.forEach(function (name, i) {
+      var prevCum = cum;
+      var add = state.monthlyNew[i];
+      cum = prevCum + add;
+      var avgCum = (prevCum + cum) / 2;
+      var revenue = (avgCum * m.blendedArpu) / 12 / 100000;
+      var surplus = revenue - peopleMonthly - fixedMonthly - mktgMonthly - studentCostMonthly;
+      rows.push({ name: name, add: add, cum: cum, revenue: revenue, people: peopleMonthly, fixed: fixedMonthly, mktg: mktgMonthly, studentcost: studentCostMonthly, surplus: surplus });
+      totals.newE += add; totals.revenue += revenue; totals.people += peopleMonthly; totals.fixed += fixedMonthly;
+      totals.mktg += mktgMonthly; totals.studentcost += studentCostMonthly; totals.surplus += surplus;
+    });
+    return { rows: rows, totals: totals };
+  }
+
+  // ---------- SVG chart helpers ----------
+  function clearSvg(svg) { while (svg.firstChild) svg.removeChild(svg.firstChild); }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function drawBarChart(svgId, ttId, data, color) {
+    var svg = document.getElementById(svgId);
+    clearSvg(svg);
+    var tt = document.getElementById(ttId);
+    var W = 1000, H = 190, padL = 10, padR = 10, padT = 10, padB = 34;
+    var innerW = W - padL - padR, innerH = H - padT - padB;
+    var maxV = Math.max.apply(null, data.map(function (d) { return d.value; }).concat([1]));
+    var n = data.length;
+    var gap = 10;
+    var bw = (innerW - gap * (n - 1)) / n;
+    data.forEach(function (d, i) {
+      var h = maxV > 0 ? (d.value / maxV) * (innerH - 16) : 0;
+      var x = padL + i * (bw + gap);
+      var y = padT + (innerH - h);
+      var rect = svgEl("rect", { x: x, y: y, width: bw, height: Math.max(h, 1), rx: 4, ry: 4, fill: color });
+      rect.addEventListener("mousemove", function (ev) { showTooltip(tt, svg, ev, d.label + ": ₹" + fmtLakh(d.value, 1) + " lakh"); });
+      rect.addEventListener("mouseleave", function () { tt.style.opacity = 0; });
+      svg.appendChild(rect);
+      var label = svgEl("text", { x: x + bw / 2, y: H - 18, "text-anchor": "middle", "font-size": "11", fill: cssVar("--ink2") });
+      label.textContent = d.label;
+      svg.appendChild(label);
+      var val = svgEl("text", { x: x + bw / 2, y: y - 4, "text-anchor": "middle", "font-size": "10.5", fill: cssVar("--muted") });
+      val.textContent = fmtLakh(d.value, 0);
+      svg.appendChild(val);
+    });
+    var baseline = svgEl("line", { x1: padL, y1: padT + innerH, x2: W - padR, y2: padT + innerH, stroke: cssVar("--baseline"), "stroke-width": 1 });
+    svg.appendChild(baseline);
+  }
+
+  function showTooltip(tt, svg, ev, text) {
+    var rect = svg.getBoundingClientRect();
+    var parentRect = svg.parentElement.getBoundingClientRect();
+    tt.textContent = text;
+    tt.style.left = (ev.clientX - parentRect.left) + "px";
+    tt.style.top = (ev.clientY - parentRect.top) + "px";
+    tt.style.opacity = 1;
+  }
+
+  function drawLineChartClean(svgId, ttId, xLabels, series, opts) {
+    var svg = document.getElementById(svgId);
+    clearSvg(svg);
+    var tt = document.getElementById(ttId);
+    var W = 1000, H = (opts && opts.height) || 200, padL = 10, padR = 10, padT = 14, padB = 30;
+    var innerW = W - padL - padR, innerH = H - padT - padB;
+    var allVals = [];
+    series.forEach(function (s) { s.values.forEach(function (v) { if (v != null && !isNaN(v)) allVals.push(v); }); });
+    if (opts && opts.includeZero) allVals.push(0);
+    var maxV = Math.max.apply(null, allVals.concat([0]));
+    var minV = Math.min.apply(null, allVals.concat([0]));
+    if (maxV === minV) maxV += 1;
+    var range = maxV - minV;
+    var n = xLabels.length;
+    function xPos(i) { return padL + (n <= 1 ? 0 : (i / (n - 1)) * innerW); }
+    function yPos(v) { return padT + innerH - ((v - minV) / range) * innerH; }
+
+    if (minV < 0 && maxV > 0) {
+      var zy = yPos(0);
+      svg.appendChild(svgEl("line", { x1: padL, y1: zy, x2: W - padR, y2: zy, stroke: cssVar("--baseline"), "stroke-width": 1, "stroke-dasharray": "4,4" }));
+    }
+    if (opts && opts.markX != null) {
+      var mx = xPos(opts.markX);
+      svg.appendChild(svgEl("line", { x1: mx, y1: padT, x2: mx, y2: padT + innerH, stroke: cssVar("--muted"), "stroke-width": 1, "stroke-dasharray": "3,3" }));
+    }
+    var step = Math.max(1, Math.ceil(n / 24));
+    series.forEach(function (s) {
+      // split into contiguous non-null runs so a gap (e.g. "no actuals yet") never draws a connecting line
+      var runs = [], cur = [];
+      s.values.forEach(function (v, i) {
+        if (v == null || isNaN(v)) { if (cur.length) { runs.push(cur); cur = []; } }
+        else cur.push(i);
+      });
+      if (cur.length) runs.push(cur);
+      runs.forEach(function (run) {
+        var pts = run.map(function (i) { return xPos(i) + "," + yPos(s.values[i]); }).join(" ");
+        svg.appendChild(svgEl("polyline", { points: pts, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      });
+      s.values.forEach(function (v, i) {
+        if (v == null || isNaN(v)) return;
+        var isRunEnd = i === n - 1 || s.values[i + 1] == null || isNaN(s.values[i + 1]);
+        if (i % step !== 0 && !isRunEnd) return;
+        svg.appendChild(svgEl("circle", { cx: xPos(i), cy: yPos(v), r: 3, fill: s.color }));
+      });
+    });
+    var labelStep = Math.max(1, Math.ceil(n / 14));
+    xLabels.forEach(function (lab, i) {
+      if (i % labelStep !== 0 && i !== n - 1) return;
+      var t = svgEl("text", { x: xPos(i), y: H - 10, "text-anchor": "middle", "font-size": "10.5", fill: cssVar("--ink2") });
+      t.textContent = lab;
+      svg.appendChild(t);
+    });
+    var hover = svgEl("rect", { x: padL, y: padT, width: innerW, height: innerH, fill: "transparent" });
+    hover.addEventListener("mousemove", function (ev) {
+      var svgRect = svg.getBoundingClientRect();
+      var relX = ((ev.clientX - svgRect.left) / svgRect.width) * W;
+      var idx = Math.round(((relX - padL) / innerW) * (n - 1));
+      idx = Math.max(0, Math.min(n - 1, idx));
+      var lines = series.map(function (s) {
+        var v = s.values[idx];
+        return s.name + ": " + (v == null || isNaN(v) ? "—" : "₹" + fmtLakh(v, 1) + " lakh");
+      });
+      showTooltip(tt, svg, ev, xLabels[idx] + " — " + lines.join(" · "));
+    });
+    hover.addEventListener("mouseleave", function () { tt.style.opacity = 0; });
+    svg.appendChild(hover);
+  }
+
+  // ---------- Expectations vs Actuals ----------
+  function renderActuals(m, mm, act, exp) {
+    document.getElementById("actuals-asof").textContent = ACTUALS.asOfLabel;
+    document.getElementById("actuals-samplenote").textContent =
+      "Based on " + act.totals.students + " admission" + (act.totals.students === 1 ? "" : "s") +
+      " recorded in the Fee Portal as of this pull — read the comparisons below as a check on the methodology, not a trend, until more admissions come in.";
+
+    document.getElementById("va-students-actual").textContent = act.totals.students;
+    document.getElementById("va-students-expected").textContent = fmtLakh(exp.students, 0);
+    var studentsRatio = exp.students > 0 ? act.totals.students / exp.students : null;
+    document.getElementById("va-students-rag").innerHTML = badgeHtml(ragHigherBetter(studentsRatio, 0.95, 0.75));
+
+    document.getElementById("va-revenue-actual").textContent = fmtLakh(act.totals.netExclGst / 100000, 2) + " L";
+    document.getElementById("va-revenue-expected").textContent = fmtLakh(exp.revenueLakh, 2) + " L";
+
+    document.getElementById("va-gst").textContent = fmtLakh(act.totals.gstAmount / 100000, 2) + " L";
+
+    document.getElementById("va-collected").textContent = fmtLakh(act.totals.collected / 100000, 2) + " L";
+    document.getElementById("va-collection-eff").innerHTML = act.totals.collectionEff != null
+      ? "Collection efficiency " + fmtPct(act.totals.collectionEff) + " " + badgeHtml(ragHigherBetter(act.totals.collectionEff, 0.95, 0.85))
+      : "—";
+
+    document.getElementById("va-discount-pct").textContent = act.totals.discountPct != null ? fmtPct(act.totals.discountPct) : "—";
+    document.getElementById("va-discount-rag").innerHTML = act.totals.discountPct != null
+      ? badgeHtml(ragLowerBetter(act.totals.discountPct, 0.10, 0.15)) : "";
+
+    document.getElementById("va-arpu").textContent = act.totals.arpu != null ? fmtINR(act.totals.arpu) : "—";
+
+    var tb = document.querySelector("#tbl-va-programs tbody");
+    tb.innerHTML = "";
+    var totTargetStudents = 0, totActualStudents = 0, totTargetRevenue = 0, totActualNetExclGst = 0, totActualGst = 0, totActualCollected = 0;
+    state.programs.forEach(function (prog) {
+      var name = prog[0], targetStudents = prog[1], targetRevenue = (prog[1] * prog[2]) / 100000;
+      var a = act.byProgram[name] || { students: 0, netExclGst: 0, gstAmount: 0, collected: 0 };
+      totTargetStudents += targetStudents; totActualStudents += a.students;
+      totTargetRevenue += targetRevenue; totActualNetExclGst += a.netExclGst / 100000; totActualGst += a.gstAmount / 100000; totActualCollected += a.collected / 100000;
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + name + "</td><td class='num'>" + targetStudents + "</td><td class='num'>" + a.students +
+        "</td><td class='num'>" + fmtLakh(targetRevenue, 2) + "</td><td class='num'>" + fmtLakh(a.netExclGst / 100000, 2) +
+        "</td><td class='num'>" + fmtLakh(a.gstAmount / 100000, 2) + "</td><td class='num'>" + fmtLakh(a.collected / 100000, 2) + "</td>";
+      tb.appendChild(tr);
+    });
+    document.getElementById("va-programs-total").innerHTML =
+      "<td>Total</td><td class='num'>" + totTargetStudents + "</td><td class='num'>" + totActualStudents +
+      "</td><td class='num'>" + fmtLakh(totTargetRevenue, 2) + "</td><td class='num'>" + fmtLakh(totActualNetExclGst, 2) +
+      "</td><td class='num'>" + fmtLakh(totActualGst, 2) + "</td><td class='num'>" + fmtLakh(totActualCollected, 2) + "</td>";
+
+    var expStudentsSeries = mm.rows.map(function (r) { return r.cum; });
+    var cumRev = 0;
+    var expRevSeries = mm.rows.map(function (r) { cumRev += r.revenue; return cumRev; });
+    var actualSeries = computeActualMonthlySeries();
+
+    drawLineChartClean("chart-va-students", "tt-va-students", state.months, [
+      { name: "Expected cumulative students", color: cssVar("--slot1"), values: expStudentsSeries },
+      { name: "Actual cumulative students", color: cssVar("--slot2"), values: actualSeries.students }
+    ], { includeZero: true });
+
+    drawLineChartClean("chart-va-revenue", "tt-va-revenue", state.months, [
+      { name: "Expected cumulative revenue", color: cssVar("--slot1"), values: expRevSeries },
+      { name: "Actual cumulative billed revenue", color: cssVar("--slot2"), values: actualSeries.revenue }
+    ], { includeZero: true });
+  }
+
+  // ---------- Management AOP scorecard + reference sections ----------
+  function renderReference(m, mm, act, exp) {
+    var studentsRatio = exp.students > 0 ? act.totals.students / exp.students : null;
+    var revenueRatio = exp.revenueLakh > 0 ? (act.totals.netExclGst / 100000) / exp.revenueLakh : null;
+    var arpuRatio = act.totals.arpu != null && m.blendedArpu > 0 ? act.totals.arpu / m.blendedArpu : null;
+    var peopleCostRatio = m.revenueLakh > 0 ? m.peopleFy27Total / m.revenueLakh : null;
+    var studentCostRatio = m.revenueLakh > 0 ? m.studentLinkedAnnualLakh / m.revenueLakh : null;
+    var noData = { cls: "warning", label: "No data source yet" };
+
+    var scoreRows = [
+      ["Enrolment", "600 students by Mar", "Cumulative paid admissions vs plan-to-date", act.totals.students + " / " + fmtLakh(exp.students, 0) + " expected", ragHigherBetter(studentsRatio, 0.95, 0.75), "Director", "Weekly"],
+      ["Revenue", fmtLakh(m.revenueLakh, 0) + " L run-rate", "Cumulative revenue (excl. GST) vs plan-to-date", fmtLakh(act.totals.netExclGst / 100000, 2) + " / " + fmtLakh(exp.revenueLakh, 2) + " L expected", ragHigherBetter(revenueRatio, 0.95, 0.75), "Director", "Weekly"],
+      ["Blended ARPU", fmtINR(m.blendedArpu), "Actual revenue excl. GST ÷ actual students", act.totals.arpu != null ? fmtINR(act.totals.arpu) : "—", ragHigherBetter(arpuRatio, 0.95, 0.85), "Director", "Monthly"],
+      ["Marketing", "≤10% of revenue", "Marketing budget ÷ revenue (plan)", fmtPct(state.mktgPct / 100), { cls: "good", label: "Within plan" }, "Marketing", "Monthly"],
+      ["Break-even", "≥400 green / 341–399 amber / &lt;341 red", "Admissions needed to cover fixed cost", m.breakevenStudents != null ? m.breakevenStudents + " (model)" : "—", ragHigherBetter(m.breakevenStudents != null ? m.totalStudents / m.breakevenStudents : null, 1, 0.85), "Director", "Monthly"],
+      ["Faculty utilisation", "≥75% teaching hours used", "See Capacity &amp; Faculty below", "—", noData, "Academic Head", "Monthly"],
+      ["Batch occupancy", "≥75% of batch capacity filled", "See Capacity &amp; Faculty below", "—", noData, "Academic Head", "Monthly"],
+      ["Fee collection", "≥95% green / 90–94% amber / &lt;90% red", "Collected ÷ Billed", act.totals.collectionEff != null ? fmtPct(act.totals.collectionEff) : "—", ragHigherBetter(act.totals.collectionEff, 0.95, 0.90), "Finance", "Weekly"],
+      ["Scholarship / discount", "≤10% green / 10–15% amber / &gt;15% red", "Scholarship ÷ Gross fee", act.totals.discountPct != null ? fmtPct(act.totals.discountPct) : "—", ragLowerBetter(act.totals.discountPct, 0.10, 0.15), "Director", "Monthly"],
+      ["Renewal", "≥70% of eligible repeaters re-enrol", "Renewed ÷ Eligible for renewal", "—", noData, "Academics", "Quarterly"],
+      ["Student retention", "≥90% stay enrolled through the year", "Active at year-end ÷ Active at admission", "—", noData, "Academics", "Quarterly"],
+      ["Faculty cost", "≤33% of revenue", "People cost ÷ Revenue (plan run-rate)", fmtPct(peopleCostRatio, 1), ragLowerBetter(peopleCostRatio, 0.33, 0.40), "Director", "Monthly"],
+      ["Student variable cost", "≤6% of revenue", "Material+T-shirt+Bag+Stationery ÷ Revenue", fmtPct(studentCostRatio, 1), ragLowerBetter(studentCostRatio, 0.06, 0.08), "Admin", "Monthly"],
+      ["Refunds", "&lt;2% of billed revenue", "Refunds ÷ Billed", "—", noData, "Finance", "Monthly"],
+      ["Cash reserve", "≥3 months of operating cost held", "Cash balance ÷ Monthly opex", "—", noData, "Director", "Monthly"]
+    ];
+    var scoreBody = document.querySelector("#tbl-scorecard tbody");
+    scoreBody.innerHTML = "";
+    scoreRows.forEach(function (r) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td><td class='num'>" + r[3] + "</td><td>" + badgeHtml(r[4]) + "</td><td>" + r[5] + "</td><td>" + r[6] + "</td>";
+      scoreBody.appendChild(tr);
+    });
+
+    var funnelBody = document.querySelector("#tbl-funnel tbody");
+    funnelBody.innerHTML = "";
+    FUNNEL.forEach(function (f, i) {
+      var actualCell = i === FUNNEL.length - 1 ? act.totals.students : "—";
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + f.stage + "</td><td class='num'>" + f.target + "</td><td>" + f.conv + "</td><td class='num'>" + actualCell + "</td><td>" + f.kpi + "</td><td>" + f.owner + "</td>";
+      funnelBody.appendChild(tr);
+    });
+
+    var capBody = document.querySelector("#tbl-capacity tbody");
+    capBody.innerHTML = "";
+    CAPACITY.forEach(function (c) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = c.map(function (v) { return "<td>" + v + "</td>"; }).join("");
+      capBody.appendChild(tr);
+    });
+
+    var collRows = [
+      ["Collection efficiency", "≥95%", "Collected ÷ Billed", act.totals.collectionEff != null ? fmtPct(act.totals.collectionEff) : "—", ragHigherBetter(act.totals.collectionEff, 0.95, 0.85), "Finance", "Weekly"],
+      ["DSO (Days Sales Outstanding)", "&lt;30 days", "Avg days from billing to collection", "—", noData, "Finance", "Monthly"],
+      ["Upfront collection", "≥50% within 30 days of admission", "Collected in first 30 days ÷ Billed", "—", noData, "Finance", "Monthly"],
+      ["Installment bounce", "&lt;3%", "Bounced installments ÷ Installments due", "—", noData, "Finance", "Monthly"],
+      ["Refund rate", "&lt;2%", "Refunds ÷ Billed", "—", noData, "Finance", "Monthly"],
+      ["Cash reserve", "≥3 months opex", "Cash balance ÷ Monthly opex", "—", noData, "Director", "Monthly"],
+      ["Scholarship / discount", "≤10%", "Scholarship ÷ Gross fee", act.totals.discountPct != null ? fmtPct(act.totals.discountPct) : "—", ragLowerBetter(act.totals.discountPct, 0.10, 0.15), "Director", "Monthly"]
+    ];
+    var collBody = document.querySelector("#tbl-collections tbody");
+    collBody.innerHTML = "";
+    collRows.forEach(function (r) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td><td class='num'>" + r[3] + "</td><td>" + badgeHtml(r[4]) + "</td><td>" + r[5] + "</td><td>" + r[6] + "</td>";
+      collBody.appendChild(tr);
+    });
+
+    function scenarioProfit(students, arpu) {
+      var revenueLakh = (students * arpu) / 100000;
+      var mktgBudgetLakh = (state.mktgPct / 100) * revenueLakh;
+      var studentLinkedAnnualLakh = (m.perStudentLinked * students) / 100000;
+      var totalCost = m.peopleFy27Total + m.fixedAnnual + studentLinkedAnnualLakh + mktgBudgetLakh;
+      return { revenueLakh: revenueLakh, mktgBudgetLakh: mktgBudgetLakh, studentLinkedAnnualLakh: studentLinkedAnnualLakh, profit: revenueLakh - totalCost };
+    }
+    var SCENARIOS = [
+      { label: "Downside", students: 450, arpu: 100000, action: "Freeze hiring; cut discretionary marketing to protect margin" },
+      { label: "Base (plan)", students: 600, arpu: 110000, action: "Run the FY27 plan as built" },
+      { label: "Upside", students: 700, arpu: 115000, action: "Add faculty/batches only after occupancy confirms the extra demand is real" }
+    ];
+    var scenBody = document.querySelector("#tbl-scenario tbody");
+    scenBody.innerHTML = "";
+    SCENARIOS.forEach(function (s) {
+      var r = scenarioProfit(s.students, s.arpu);
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + s.label + "</td><td class='num'>" + s.students + "</td><td class='num'>" + fmtINR(s.arpu) +
+        "</td><td class='num'>" + fmtLakh(r.revenueLakh / 100, 2) + "</td><td class='num'>" + fmtLakh(r.mktgBudgetLakh, 2) +
+        "</td><td class='num'>" + fmtLakh(r.studentLinkedAnnualLakh, 2) + "</td><td class='num'>" + fmtLakh(r.profit, 2) + "</td><td>" + s.action + "</td>";
+      scenBody.appendChild(tr);
+    });
+
+    var riskBody = document.querySelector("#tbl-risk tbody");
+    riskBody.innerHTML = "";
+    RISK_REGISTER.forEach(function (r) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td><td>" + r[3] + "</td><td>" + r[4] + "</td><td>" + r[5] + "</td>";
+      riskBody.appendChild(tr);
+    });
+
+    var benchBody = document.querySelector("#tbl-benchmark tbody");
+    benchBody.innerHTML = "";
+    BENCHMARKS.forEach(function (b) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + b[0] + "</td><td>" + b[1] + "</td><td>" + b[2] + "</td><td>" + b[3] + "</td>";
+      benchBody.appendChild(tr);
+    });
+  }
+
+  // ---------- render ----------
+  function render() {
+    var m = compute();
+
+    // snapshot tiles
+    var snap = document.getElementById("snapshot");
+    snap.innerHTML = "";
+    var tiles = [
+      ["Students", m.totalStudents, ""],
+      ["Gross Revenue", fmtLakh(m.revenueLakh, 1) + " L", ""],
+      ["Blended ARPU", fmtINR(m.blendedArpu), "per student"],
+      ["Total Operating Cost", fmtLakh(m.totalOperatingCost, 1) + " L", ""],
+      ["EBITDA", fmtLakh(m.ebitda, 1) + " L", fmtPct(m.ebitdaMargin) + " margin"],
+      ["Break-even", m.breakevenStudents != null ? m.breakevenStudents + " students" : "—", ""]
+    ];
+    tiles.forEach(function (t) {
+      var d = document.createElement("div");
+      d.className = "tile";
+      d.innerHTML = '<div class="label">' + t[0] + '</div><div class="val">' + t[1] + "</div>" + (t[2] ? '<div class="sub">' + t[2] + "</div>" : "");
+      snap.appendChild(d);
+    });
+
+    document.getElementById("flag-ebitda").textContent = fmtLakh(m.ebitda, 2);
+    document.getElementById("flag-margin").textContent = fmtPct(m.ebitdaMargin);
+    document.getElementById("flag-be").textContent = m.breakevenStudents != null ? m.breakevenStudents : "—";
+
+    // programs table
+    var progRows = document.querySelectorAll("#tbl-programs tbody tr");
+    state.programs.forEach(function (p, i) {
+      var revenue = (p[1] * p[2]) / 100000;
+      var studentMix = m.totalStudents > 0 ? p[1] / m.totalStudents : 0;
+      var revenueMix = m.revenueLakh > 0 ? revenue / m.revenueLakh : 0;
+      var tr = progRows[i];
+      tr.querySelector('[data-cell="prog-revenue"]').textContent = fmtLakh(revenue, 2);
+      tr.querySelector('[data-cell="prog-studentmix"]').textContent = fmtPct(studentMix);
+      tr.querySelector('[data-cell="prog-revenuemix"]').textContent = fmtPct(revenueMix);
+    });
+    document.getElementById("prog-tot-students").textContent = m.totalStudents;
+    document.getElementById("prog-tot-arpu").textContent = fmtINR(m.blendedArpu);
+    document.getElementById("prog-tot-revenue").textContent = fmtLakh(m.revenueLakh, 2);
+
+    drawBarChart("chart-programs", "tt-programs", state.programs.map(function (p) { return { label: p[0], value: (p[1] * p[2]) / 100000 }; }), cssVar("--slot1"));
+
+    // people table
+    var peopleRows = document.querySelectorAll("#tbl-people tbody tr");
+    state.people.forEach(function (p, i) {
+      var fy27 = p[1] * (1 + state.hikePct / 100);
+      var monthly = (fy27 * 100000) / 12;
+      var tr = peopleRows[i];
+      tr.querySelector('[data-cell="people-fy27"]').textContent = fmtLakh(fy27, 3);
+      tr.querySelector('[data-cell="people-monthly"]').textContent = fmtINR(monthly);
+    });
+    document.getElementById("people-tot-current").textContent = fmtLakh(m.peopleCurrentTotal, 2);
+    document.getElementById("people-tot-fy27").textContent = fmtLakh(m.peopleFy27Total, 3);
+    document.getElementById("people-tot-monthly").textContent = fmtINR((m.peopleFy27Total * 100000) / 12);
+    document.getElementById("people-pct-revenue").textContent = m.revenueLakh > 0 ? fmtPct(m.peopleFy27Total / m.revenueLakh, 2) : "—";
+
+    // fixed + student-linked
+    document.getElementById("fixed-annual").textContent = fmtLakh(m.fixedAnnual, 2);
+    document.getElementById("studentcost-perstudent").textContent = fmtINR(m.perStudentLinked);
+    document.getElementById("studentcost-annual").textContent = fmtLakh(m.studentLinkedAnnualLakh, 2);
+
+    // marketing
+    document.getElementById("out-mktgbudget").value = fmtLakh(m.mktgBudgetLakh, 2);
+    document.getElementById("out-cac").value = fmtINR(m.cac);
+    var chanRows = document.querySelectorAll("#tbl-channels tbody tr");
+    var chanPctTotal = 0, chanBudgetTotal = 0;
+    state.channels.forEach(function (c, i) {
+      var budget = c[1] * m.mktgBudgetLakh;
+      chanPctTotal += c[1]; chanBudgetTotal += budget;
+      chanRows[i].querySelector('[data-cell="chan-budget"]').textContent = fmtLakh(budget, 2);
+    });
+    document.getElementById("channels-tot-pct").textContent = fmtPct(chanPctTotal, 0);
+    document.getElementById("channels-tot-budget").textContent = fmtLakh(chanBudgetTotal, 2);
+
+    // P&L
+    var pnlBody = document.querySelector("#tbl-pnl tbody");
+    pnlBody.innerHTML = "";
+    var pnlRows = [
+      ["Revenue", m.revenueLakh, m.revenueLakh / m.revenueLakh],
+      ["People Cost", -m.peopleFy27Total, -m.peopleFy27Total / m.revenueLakh],
+      ["Rent + Electricity + Printing/Other", -m.fixedAnnual, -m.fixedAnnual / m.revenueLakh],
+      ["Student Materials + T-shirt + Bag + Stationery", -m.studentLinkedAnnualLakh, -m.studentLinkedAnnualLakh / m.revenueLakh],
+      ["Marketing", -m.mktgBudgetLakh, -m.mktgBudgetLakh / m.revenueLakh]
+    ];
+    pnlRows.forEach(function (r) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + r[0] + "</td><td class='num'>" + fmtLakh(r[1], 2) + "</td><td class='num'>" + fmtPct(r[2], 1) + "</td>";
+      pnlBody.appendChild(tr);
+    });
+    var ebitdaRow = document.createElement("tr");
+    ebitdaRow.className = "total";
+    ebitdaRow.innerHTML = "<td>EBITDA / Operating Surplus</td><td class='num'>" + fmtLakh(m.ebitda, 2) + "</td><td class='num'>" + fmtPct(m.ebitdaMargin, 1) + "</td>";
+    pnlBody.appendChild(ebitdaRow);
+    var financeRows = [
+      ["Term loan interest (PNB, " + fmtLakh(state.loanPrincipalL, 0) + "L @ " + state.loanRatePct + "%)", -m.termLoanInterest],
+      ["CC interest (" + fmtLakh(state.ccUsedL, 0) + "L utilised @ " + state.ccRatePct + "%)", -m.ccInterest]
+    ];
+    financeRows.forEach(function (r) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + r[0] + "</td><td class='num'>" + fmtLakh(r[1], 2) + "</td><td class='num'>" + fmtPct(m.revenueLakh > 0 ? r[1] / m.revenueLakh : 0, 1) + "</td>";
+      pnlBody.appendChild(tr);
+    });
+    var pbtRow = document.createElement("tr");
+    pbtRow.className = "total";
+    pbtRow.innerHTML = "<td>Profit Before Tax (PBT)</td><td class='num'>" + fmtLakh(m.pbt, 2) + "</td><td class='num'>" + fmtPct(m.revenueLakh > 0 ? m.pbt / m.revenueLakh : 0, 1) + "</td>";
+    pnlBody.appendChild(pbtRow);
+    var taxRow = document.createElement("tr");
+    taxRow.innerHTML = "<td>Estimated tax (illustrative @ " + state.taxPct + "% of PBT)</td><td class='num'>" + fmtLakh(-m.taxAmount, 2) + "</td><td class='num'>" + fmtPct(m.revenueLakh > 0 ? -m.taxAmount / m.revenueLakh : 0, 1) + "</td>";
+    pnlBody.appendChild(taxRow);
+    var patRow = document.createElement("tr");
+    patRow.className = "total";
+    patRow.innerHTML = "<td>Profit After Tax (PAT, illustrative)</td><td class='num'>" + fmtLakh(m.profitAfterTax, 2) + "</td><td class='num'>" + fmtPct(m.revenueLakh > 0 ? m.profitAfterTax / m.revenueLakh : 0, 1) + "</td>";
+    pnlBody.appendChild(patRow);
+
+    // break-even table
+    var beBody = document.querySelector("#tbl-breakeven tbody");
+    beBody.innerHTML = "";
+    var beRows = [
+      ["Blended ARPU", fmtINR(m.blendedArpu), "Average annual fee / student"],
+      ["Marketing %", fmtPct(state.mktgPct / 100), "Set above"],
+      ["Student-linked cost / student", fmtINR(m.perStudentLinked), "Material + T-shirt + Bag + Stationery"],
+      ["Contribution / student", fmtINR(m.contributionPerStudent), "ARPU net of marketing % and student-linked cost"],
+      ["Annual fixed cost (People + Rent/Electricity/Printing)", fmtLakh(m.fixedForBreakevenRupees / 100000, 2) + " L", "Does not scale with student count"],
+      ["Break-even admissions", m.breakevenStudents != null ? m.breakevenStudents : "—", "Fixed cost ÷ contribution per student"],
+      ["Operating profit at " + m.totalStudents + " students", fmtLakh(m.ebitda, 2) + " L", "Before tax, depreciation, interest"],
+      ["Operating margin at " + m.totalStudents + " students", fmtPct(m.ebitdaMargin, 1), "EBITDA ÷ Revenue"]
+    ];
+    beRows.forEach(function (r) {
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + r[0] + "</td><td class='num'>" + r[1] + "</td><td>" + r[2] + "</td>";
+      beBody.appendChild(tr);
+    });
+
+    // break-even sensitivity chart: 0..max(700, totalStudents+100) step 50
+    var maxN = Math.max(700, Math.ceil((m.totalStudents + 100) / 50) * 50);
+    var xs = [], ys = [];
+    for (var n = 0; n <= maxN; n += 50) {
+      xs.push(n);
+      var profit = (n * m.contributionPerStudent - m.fixedForBreakevenRupees) / 100000;
+      ys.push(profit);
+    }
+    var markIdx = m.breakevenStudents != null ? xs.findIndex(function (v) { return v >= m.breakevenStudents; }) : null;
+    drawLineChartClean("chart-breakeven", "tt-breakeven", xs.map(String), [{ name: "Operating profit", color: cssVar("--slot1"), values: ys }], { includeZero: true, markX: markIdx });
+
+    // monthly plan
+    var mm = computeMonthly(m);
+    var monthlyRows = document.querySelectorAll("#tbl-monthly tbody tr");
+    mm.rows.forEach(function (r, i) {
+      var tr = monthlyRows[i];
+      tr.querySelector('[data-cell="month-cum"]').textContent = r.cum;
+      tr.querySelector('[data-cell="month-revenue"]').textContent = fmtLakh(r.revenue, 2);
+      tr.querySelector('[data-cell="month-people"]').textContent = fmtLakh(r.people, 2);
+      tr.querySelector('[data-cell="month-fixed"]').textContent = fmtLakh(r.fixed, 2);
+      tr.querySelector('[data-cell="month-mktg"]').textContent = fmtLakh(r.mktg, 2);
+      tr.querySelector('[data-cell="month-studentcost"]').textContent = fmtLakh(r.studentcost, 2);
+      var surplusCell = tr.querySelector('[data-cell="month-surplus"]');
+      surplusCell.textContent = fmtLakh(r.surplus, 2);
+      surplusCell.style.color = r.surplus >= 0 ? "var(--good-text)" : "var(--critical)";
+    });
+    var totRow = document.getElementById("monthly-total-row");
+    totRow.innerHTML =
+      "<td>FY Total</td><td class='num'>" + mm.totals.newE + "</td><td class='num'>" + mm.rows[mm.rows.length - 1].cum + "</td>" +
+      "<td class='num'>" + fmtLakh(mm.totals.revenue, 2) + "</td><td class='num'>" + fmtLakh(mm.totals.people, 2) + "</td>" +
+      "<td class='num'>" + fmtLakh(mm.totals.fixed, 2) + "</td><td class='num'>" + fmtLakh(mm.totals.mktg, 2) + "</td>" +
+      "<td class='num'>" + fmtLakh(mm.totals.studentcost, 2) + "</td><td class='num'>" + fmtLakh(mm.totals.surplus, 2) + "</td>";
+
+    document.getElementById("monthly-note").textContent =
+      "FY27 recognizes " + fmtLakh(mm.totals.revenue, 1) + " lakh of the " + fmtLakh(m.revenueLakh, 1) +
+      " lakh full run-rate revenue while enrolment is still ramping up to " + m.totalStudents + " students by March; the run-rate P&L above is the steady-state plan once the target mix is fully enrolled.";
+
+    drawLineChartClean(
+      "chart-monthly", "tt-monthly", state.months,
+      [
+        { name: "Revenue", color: cssVar("--slot1"), values: mm.rows.map(function (r) { return r.revenue; }) },
+        { name: "Total cost", color: cssVar("--slot2"), values: mm.rows.map(function (r) { return r.people + r.fixed + r.mktg + r.studentcost; }) }
+      ],
+      { includeZero: false }
+    );
+
+    // expectations vs actuals + reference sections
+    var act = computeActuals();
+    var fyProg = fyMonthProgress();
+    var exp = computeExpectedToDate(mm, fyProg);
+    renderActuals(m, mm, act, exp);
+    renderReference(m, mm, act, exp);
+  }
+
+  function recalcAll() {
+    readState();
+    render();
+  }
+
+  document.addEventListener("input", function (ev) {
+    if (ev.target.closest(".card, .row-flex")) recalcAll();
+  });
+
+  document.getElementById("btn-reset").addEventListener("click", function () {
+    state = clone(DEFAULTS);
+    rebuildInputsFromState();
+    recalcAll();
+  });
+
+  function rebuildInputsFromState() {
+    document.querySelectorAll('[data-kind="prog-students"]').forEach(function (el) { el.value = state.programs[+el.dataset.i][1]; });
+    document.querySelectorAll('[data-kind="prog-arpu"]').forEach(function (el) { el.value = state.programs[+el.dataset.i][2]; });
+    document.querySelectorAll('[data-kind="people-current"]').forEach(function (el) { el.value = state.people[+el.dataset.i][1]; });
+    document.querySelectorAll('[data-kind="chan-pct"]').forEach(function (el) { el.value = Math.round(state.channels[+el.dataset.i][1] * 100); });
+    document.querySelectorAll('[data-kind="month-new"]').forEach(function (el) { el.value = state.monthlyNew[+el.dataset.i]; });
+    document.getElementById("in-hike").value = state.hikePct;
+    document.getElementById("in-rent").value = state.rentM;
+    document.getElementById("in-elec").value = state.elecM;
+    document.getElementById("in-print").value = state.printM;
+    document.getElementById("in-material").value = state.material;
+    document.getElementById("in-tshirt").value = state.tshirt;
+    document.getElementById("in-bag").value = state.bag;
+    document.getElementById("in-stationery").value = state.stationery;
+    document.getElementById("in-mktgpct").value = state.mktgPct;
+    document.getElementById("in-loanprincipal").value = state.loanPrincipalL;
+    document.getElementById("in-loanrate").value = state.loanRatePct;
+    document.getElementById("in-cclimit").value = state.ccLimitL;
+    document.getElementById("in-ccused").value = state.ccUsedL;
+    document.getElementById("in-ccrate").value = state.ccRatePct;
+    document.getElementById("in-taxpct").value = state.taxPct;
+    document.getElementById("in-opening").value = state.opening;
+  }
+
+  // initial render
+  recalcAll();
+
+  // redraw charts on resize/theme change for crisp hover math (labels use viewBox coords, charts are responsive already)
+  window.addEventListener("resize", render);
+})();
+</script>
+</body>
+</html>
